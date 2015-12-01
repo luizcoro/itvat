@@ -22,8 +22,8 @@ class AgendamentoController extends Controller
     public function index()
     {
         $agendamentos = \App\Agendamento::dePaciente(\Auth::user()->id)->get();
-        return $agendamentos;
-        /* return view('user.agendamentos', compact('agendamentos')); */
+        
+        return view('user.agendamentos', compact('agendamentos'));
     }
 
     /**

@@ -93,13 +93,13 @@
 		  </div><!-- /.container-fluid -->
 		</nav>
 
-		<div class="content">
+		<div class="content container">
 			@yield("content")
 		</div>
 
 		<div id="push"></div>
 	</div>
-	<footer id="footer">
+	<footer id="footer container">
       <div class="container">
         <p class="text-muted">Copyright © 2015 Luiz Fernando Afra Brito</p>
       </div>
