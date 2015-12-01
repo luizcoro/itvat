@@ -1,5 +1,7 @@
 @extends('app')
 
+@section('title', 'Cadastro de nova conta')
+
 @section('content')
 <div class="container">
 	<div class="row">
@@ -32,4 +34,4 @@
 		</div>
 	</div>
 </div>
-@endsection('content')
+@endsection

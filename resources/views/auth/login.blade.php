@@ -1,7 +1,8 @@
 @extends('app')
 
-@section('content')
+@section('title', 'Faça login em sua conta')
 
+@section('content')
 <div class="container">
     <div class="row">
         <div class="col-md-6">
@@ -10,27 +11,36 @@
                     <h3 class="panel-title">JÁ SOU CADASTRADO</h3>
                 </div>
                 <div class="panel-body">
-                    <form action="{{ url('login') }}" method="POST">
-                        {!! csrf_field() !!}
+                    {!! Form::open(['url' => url('login'), 'method' => 'post']) !!}
                        
                          <div class="form-group">
-                            <label for="email">Email</label>
-                            <input id="email" type="text" class="form-control" name="email" value="{{ old('email') }}">
+                            {!! Form::label('email', 'Email') !!}
+                            {!! Form::email('email', old('email'), ['class' => 'form-control']) !!}
                         </div>
                         <div class="form-group">
-                            <label for="password">Senha</label>
-                            <input id="password" type="password" class="form-control" name="password">
+                            {!! Form::label('password', 'Senha') !!}
+                            {!! Form::password('password', ['class' => 'form-control']) !!}
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" name="remember"> Continuar conectado
+                                {!! Form::checkbox('remember') !!}
+                                Continuar conectado
                             </label>
                         </div>
 
-                        <button type="submit" class="btn btn-default">Entrar</button>
-                    </form>
+                        {!! Form::submit('Entrar', ['class' => 'btn btn-default']) !!}
+                    {!! Form::close() !!}
                 </div>
             </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
         </div>
         <div class="col-md-6 text-center">
             <div class="panel panel-default">
@@ -49,4 +59,4 @@
     </div>
 </div>
 
-@endsection('content')
+@endsection
