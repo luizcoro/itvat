@@ -33,7 +33,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+        $this->middleware('guest', ['except' => ['getLogout', 'profile']]);
     }
 
     /**
@@ -63,6 +63,33 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'tipo' => 0
         ]);
+    }
+
+    protected function profile()
+    {
+        $user = \Auth::user();
+
+        $profile = array();
+
+        $profile['nome'] = $user->name;
+        $profile['email'] = $user->email;
+        $profile['nascimento'] = $user->nascimento;
+        $profile['telefone'] = $user->telefone;
+        $profile['tipo'] = $user->tipo == 0 ? 'Paciente' : 'Médico';
+
+        if($user->tipo == 0)
+        {
+            $profile['sangue'] = \App\Paciente::find($user->id)->sangue;
+        }
+        else
+        {
+            $medico = \App\Medico::find($user->id);
+            $profile['crm'] = $medico->crm;
+            $profile['foto'] = $medico->foto;
+        }
+
+        return view('auth.profile', compact('profile'));
     }
 }

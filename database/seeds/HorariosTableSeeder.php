@@ -22,11 +22,14 @@ class HorariosTableSeeder extends Seeder
         {
             //domingo a sabado
             for ($i = 0; $i < 7; $i++) {
-
-                //trabalha de manha
-                if(rand(0,6) > 1)
+                $ind = ($i == 0 || $i == 6) ? 4 : 2;
+              //trabalha de manha
+                if(rand(0,6) > $ind)
                 {
                     $entrada = date('H:i:00', rand($seis_horas, $doze_horas));
+                    $hour = date('H', strtotime($entrada));
+                    $minute = date('i', strtotime($entrada)) > '30' ? '30' : '00';
+                    $entrada = "$hour:$minute:00";
 
                     App\Horario::create([
                         'medico_id' => $medico->id,
@@ -37,10 +40,14 @@ class HorariosTableSeeder extends Seeder
                 }
 
                 //trabalha de tarde
-                if(rand(0,6) > 1)
+                if(rand(0,6) > $ind)
                 {
                     $entrada = date('H:i:00', rand($treze_horas, $vinte_horas));
 
+                    $hour = date('H', strtotime($entrada));
+                    $minute = date('i', strtotime($entrada)) > '30' ? '30' : '00';
+                    $entrada = "$hour:$minute:00";
+                    
                     App\Horario::create([
                         'medico_id' => $medico->id,
                         'dia_da_semana' => $i,

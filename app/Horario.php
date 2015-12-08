@@ -21,4 +21,9 @@ class Horario extends Model
     {
         return $this->belongsTo('App\Medico');
     }
+    
+    public function scopeDeMedico($query, $medico_id)
+    {
+        return $query->where('medico_id', $medico_id)->get();
+    }
 }

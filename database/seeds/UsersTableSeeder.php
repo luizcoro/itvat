@@ -17,11 +17,11 @@ class UsersTableSeeder extends Seeder
         {
             App\User::create([
                 'name' => $faker->name,
-                'email' => $faker->email,
-                'password' => '123',
+                'email' => $faker->unique()->email,
+                'password' => bcrypt('123123'),
                 'nascimento' => $faker->date($format = 'Y-m-d', $max = 'now'),
                 'telefone' => $faker->phone,
-                'tipo' => $faker->numberBetween($min = 0, $max = 2)
+                'tipo' => $faker->numberBetween($min = 0, $max = 1)
             ]);
         }
     }

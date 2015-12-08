@@ -14,14 +14,14 @@ class CreateAgendamentoDoencaTable extends Migration
     {
         Schema::create('agendamento_doenca', function (Blueprint $table) {
             $table->integer('paciente_id')->unsigned()->index();
-            $table->dateTime('data_hora')->index();
+            $table->dateTime('inicio')->index();
             $table->integer('doenca_id')->unsigned()->index();
             $table->timestamps();
 
-            $table->primary(['paciente_id', 'data_hora', 'doenca_id']);
+            $table->primary(['paciente_id', 'inicio', 'doenca_id']);
 
-            $table->foreign(['paciente_id', 'data_hora'])
-                ->references(['paciente_id', 'data_hora'])
+            $table->foreign(['paciente_id', 'inicio'])
+                ->references(['paciente_id', 'inicio'])
                 ->on('agendamentos')
                 ->onDelete('cascade');
 

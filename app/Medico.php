@@ -10,7 +10,8 @@ class Medico extends Model
 
     protected $fillable = [
         'id',
-        'crm'
+        'crm',
+        'foto'
     ];
 
     public function horarios()
@@ -31,5 +32,17 @@ class Medico extends Model
     public function areas()
     {
         return $this->belongsToMany('App\Area')->withTimestamps();
+    }
+
+    public function userInfo()
+    {
+        return $this->hasOne('App\User', 'id', 'id');
+    }
+    
+    public function getAgendamentosBetween($start, $end)
+    {
+        return \App\Agendamento::where('medico_id', $this->id)
+            ->whereBetween('inicio', [$start, $end])
+            ->get();
     }
 }

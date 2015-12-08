@@ -13,7 +13,7 @@ class RemediosTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create('pt_BR');
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             App\Remedio::create([
                 'nome' => $faker->word
             ]);

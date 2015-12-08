@@ -17,7 +17,7 @@ class PacientesTableSeeder extends Seeder
 
         foreach($users as $user)
         {
-            if($user->tipo != 0)
+            if($user->tipo == 0)
             {
                 App\Paciente::create([
                     'id' => $user->id,

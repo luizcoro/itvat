@@ -15,6 +15,7 @@ class CreateMedicosTable extends Migration
         Schema::create('medicos', function (Blueprint $table) {
             $table->integer('id')->unsigned()->index();
             $table->integer('crm')->unsigned();
+            $table->string('foto')->nullable();
             $table->timestamps();
 
             $table->primary('id');

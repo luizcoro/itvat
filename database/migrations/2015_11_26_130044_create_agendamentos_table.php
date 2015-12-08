@@ -14,14 +14,15 @@ class CreateAgendamentosTable extends Migration
     {
         Schema::create('agendamentos', function (Blueprint $table) {
             $table->integer('paciente_id')->unsigned()->index();
-            $table->dateTime('data_hora')->index();
+            $table->dateTime('inicio')->index();
+            $table->dateTime('termino');
             $table->integer('medico_id')->unsigned();
             $table->integer('clinica_id')->unsigned();
             $table->tinyInteger('status');
             $table->string('obs')->nullable();
             $table->timestamps();
 
-            $table->primary(['paciente_id', 'data_hora']);
+            $table->primary(['paciente_id', 'inicio']);
 
             $table->foreign('paciente_id')
                 ->references('id')

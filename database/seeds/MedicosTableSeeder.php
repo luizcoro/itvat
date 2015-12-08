@@ -17,11 +17,12 @@ class MedicosTableSeeder extends Seeder
 
         foreach($users as $user)
         {
-            if($user->tipo != 1)
+            if($user->tipo == 1)
             {
                 App\Medico::create([
                     'id' => $user->id,
-                    'crm' => $faker->unique()->randomNumber
+                    'crm' => $faker->unique()->randomNumber,
+                    'foto' => 'img/nicolas/cage_' . rand(1, 22) . '.jpg' 
                 ]);
             }
         }

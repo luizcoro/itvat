@@ -5,31 +5,29 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <form method="POST" action="{{ url('cadastrar') }}">
-            {!! csrf_field() !!}
-
+        {!! Form::open(['url' => url('/cadastrar'), 'method' => 'post']) !!}
             <div class="form-group">
-                <label for="name">Nome</label>
-                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}">
+                {!! Form::label('name', 'Nome') !!}
+                {!! Form::text('name', old('name'), ['class' => 'form-control']) !!}
             </div>
 
             <div class="form-group">
-                <label for="email">Email</label>
-                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
+                {!! Form::label('email', 'Email') !!}
+                {!! Form::email('email', old('email'), ['class' => 'form-control']) !!}
             </div>
 
             <div class="form-group">
-                <label for="password">Senha</label>
-                <input id="password" type="password" class="form-control" name="password">
+                {!! Form::label('password', 'Senha') !!}
+                {!! Form::password('password', ['class' => 'form-control']) !!}
             </div>
 
             <div class="form-group">
-                <label for="password2">Repita a senha</label>
-                <input id="password2" type="password" class="form-control" name="password_confirmation">
+                {!! Form::label('password_confirmation', 'Repita a senha') !!}
+                {!! Form::password('password_confirmation', ['class' => 'form-control']) !!}
             </div>
 
-            <button type="submit" class="btn btn-default">Cadastrar</button>
-        </form>
+            {!! Form::submit('Cadastrar', ['class' => 'btn btn-default']) !!}
+        {!! Form::close() !!}
     </div>
 </div>
 @endsection

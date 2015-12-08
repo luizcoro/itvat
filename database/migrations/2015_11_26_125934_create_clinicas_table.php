@@ -16,6 +16,9 @@ class CreateClinicasTable extends Migration
             $table->increments('id');
             $table->string('nome');
             $table->string('endereco');
+            $table->string('lat');
+            $table->string('lng');
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

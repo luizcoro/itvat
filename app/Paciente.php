@@ -17,4 +17,9 @@ class Paciente extends Model
     {
         return $this->hasMany('App\Agendamento');
     }
+
+    public function userInfo()
+    {
+        return $this->hasOne('App\User', 'id', 'id');
+    }
 }

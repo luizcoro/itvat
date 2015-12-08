@@ -12,7 +12,8 @@ class Agendamento extends Model
 
     protected $fillable = [
         'paciente_id',
-        'data_hora',
+        'inicio',
+        'termino',
         'medico_id',
         'clinica_id',
         'status',
@@ -43,7 +44,7 @@ class Agendamento extends Model
             ->join('agendamentos', function($join) use($pivot_table)
             {
                 $join->on($pivot_table . '.paciente_id', '=', $this->paciente_id);
-                $join->on($pivot_table . '.data_hora', '=', $this->data_hora);
+                $join->on($pivot_table . '.inicio', '=', $this->data_hora);
             })
             ->select('doencas.*')
             ->distinct()
@@ -56,7 +57,7 @@ class Agendamento extends Model
 
         DB::table('agendamento_doenca')->insert([
             'paciente_id' => $this->paciente_id,
-            'data_hora' => $this->data_hora,
+            'inicio' => $this->inicio,
             'doenca_id' => $doenca_id,
             'created_at' => $now,
             'updated_at' => $now
@@ -65,11 +66,11 @@ class Agendamento extends Model
 
     public function scopeDePaciente($query, $paciente_id)
     {
-        return $query->where('paciente_id', $paciente_id);
+        return $query->where('paciente_id', $paciente_id)->get();
     }
 
     public function scopeDeMedico($query, $medico_id)
     {
-        return $query->where('medico_id', $medico_id);
+        return $query->where('medico_id', $medico_id)->get();
     }
 }

@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Sao_Paulo',
 
     /*
     |--------------------------------------------------------------------------
@@ -146,7 +146,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,
-
+        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
     ],
 
     /*
@@ -198,6 +198,7 @@ return [
         
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
+        'JavasScript' => Laracasts\Utilities\JavaScript\JavaScriptFacade::class,
     ],
 
 ];

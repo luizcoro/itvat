@@ -24,7 +24,7 @@ class Doenca extends Model
             ->join('agendamento_doenca', function($join) use($table)
             {
                 $join->on($table . '.paciente_id', '=', 'agendamento_doenca.paciente_id');
-                $join->on($table . '.data_hora', '=', 'agendamento_doenca.data_hora');
+                $join->on($table . '.inicio', '=', 'agendamento_doenca.inicio');
             })
             ->join('doencas', $this->id, '=', 'doencas.id')
             ->select('agendamentos.*')
@@ -32,13 +32,13 @@ class Doenca extends Model
             ->get();
     }
 
-    public function attachAgendamento($paciente_id, $data_hora)
+    public function attachAgendamento($paciente_id, $inicio)
     {
         $now = Carbon\Carbon::create();
 
         DB::table('agendamento_doenca')->insert([
             'paciente_id' => $paciente_id,
-            'data_hora' => $data_hora,
+            'inicio' => $inicio,
             'doenca_id' => $this->id,
             'created_at' => $now,
             'updated_at' => $now
