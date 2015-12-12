@@ -19,17 +19,17 @@
 @section('content')
 <div class="row">
     <div class="col-md-5">
-        <h3>{{ $medico->userinfo->name }}</h3>
+        <h3>{{ $medico->info_basica->name }}</h3>
         <a href="#" class="thumbnail">
             {!! Html::image($medico->foto, 'Foto do médico') !!}
         </a>
         <label for="">CRM:&nbsp;</label> {{ $medico->crm  }} <br/>
-        <label for="">Email:&nbsp;</label> {{ $medico->userInfo->email  }} <br/>
-        <label for="">Telefone:&nbsp;</label> {{ $medico->userInfo->telefone  }} <br/>
+        <label for="">Email:&nbsp;</label> {{ $medico->info_basica->email  }} <br/>
+        <label for="">Telefone:&nbsp;</label> {{ $medico->info_basica->telefone  }} <br/>
 
-        @if (count($medico->areas) != 0)
+        @if (count($areas) != 0)
         <label>Áreas de atuação:</label>
-        @foreach ($medico->areas as $area)
+        @foreach ($areas as $area)
             {{ $area->nome }} &nbsp;&nbsp;
         @endforeach
         @endif
@@ -40,19 +40,42 @@
     </div>
 </div>
 
-@if (count($medico->clinicas) != 0)
+@if (count($clinicas) != 0)
+
+<div id="agendamento" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 id="agendamento-header" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+            {!! Form::open(['id' => 'agendamento-form', 'url' => url('/agendamento/cadastrar'), 'method' => 'post']) !!}
+                    {!! Form::hidden('medico', $medico->id) !!}
+                <div class="form-group">
+                    {!! Form::label('clinica', 'Clínica') !!}
+                    {!! Form::select('clinica', $clinicas->lists('nome', 'id'), Input::old('clinica'), ['class' => 'form-control']) !!}
+                </div>
+                <div class="form-group">
+                    {!! Form::label('hora', 'Hora') !!}
+                    {!! Form::select('hora', [], null, ['class' => 'form-control']) !!}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    {!! Form::submit('Agendar', ['class' => 'btn btn-primary']) !!}
+                </div>
+            {!! Form::close() !!}
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div class="row">
-    <div class="col-md-12">
-        <h3>Clinicas de atuação</h3>
-    </div>
-</div>
+    <h3>Clinicas de atuação</h3>
+    <div class="col-md-12"> 
 
-<div class="row">
-    <div class="col-md-12">
-        
         <ul>
-        @foreach ($medico->clinicas as $clinica)
+        @foreach ($clinicas as $clinica)
 <li><label><a href="{{ url('/clinica/' . $clinica->id) }}">{{ $clinica->nome}}</a>: &nbsp;</label>{{ $clinica->endereco }}</li>
         @endforeach
         </ul>
@@ -81,8 +104,8 @@
     <div class="col-md-12">
     </div>
 </div>
+<button id="go-to-month-bt" type="button" class="fc-button fc-state-default fc-corner-left fc-corner-right" hidden="true"><<</button>
 
-<button id="go-to-month-bt" type="button" class="fc-button fc-state-default fc-corner-left fc-corner-right" hidden="hidden"><<</button>
 @endsection
 
 
@@ -93,10 +116,12 @@
 
 @include('medico.scripts')
 
+@if (count($medico->clinicas) > 0)
+
 <script>
 $(document).ready(function() {
     var button = $('#go-to-month-bt');
-    
+    $('#agendamento').modal({ show: false}) 
     function hasEventInDate(date)
     {
         var events = $('#calendar').fullCalendar('clientEvents');
@@ -163,7 +188,37 @@ if(view.type === 'month' && date.diff(moment(), 'day') >= 0 && hasEventInDate(da
         },
 
         eventClick: function(calEvent, jsEvent, view) {
-                alert('Event: ' + calEvent.title);
+            var start = moment(calEvent.start);
+            var end = moment(calEvent.end);
+            var horas = [];
+
+            while(start.diff(end, 'horas') < 0)
+            {
+                var hora_corrente = moment(start);
+                var proxima_hora = moment(start.add(1, 'hours'));
+    
+                if(end.diff(proxima_hora, 'minutes') < 0)
+                    proxima_hora = moment(end);
+
+                horas.push({
+                    'start' : hora_corrente.format('HH:mm:ss'),
+                    'end' : proxima_hora.format('HH:mm:ss')
+                });
+            }
+
+            $('#agendamento').modal('show');
+            $('#agendamento-header').text('Agende sua consulta (' + start.format('YYYY-MM-DD') + ')');
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'data',
+                value: start.format('YYYY-MM-DD')
+            }).prependTo('#agendamento-form');
+
+            var options = $('#hora');
+            options.empty();
+            $.each(horas, function(index, value) {
+                options.append($("<option />").val(value.start + '~' + value.end).text(value.start + '~' + value.end));
+            });
         }
     });
 
@@ -217,7 +272,6 @@ if(view.type === 'month' && date.diff(moment(), 'day') >= 0 && hasEventInDate(da
 });
 </script>
 
-@if (count($medico->clinicas) != 0)
 <script>
 
     var map;

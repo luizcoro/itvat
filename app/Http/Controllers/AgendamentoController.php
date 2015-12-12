@@ -31,7 +31,7 @@ class AgendamentoController extends Controller
         }
 
         $agendamentos_paciente = \App\Agendamento::dePaciente($user->id);
-
+        
         return view('agendamento.index', compact(['agendamentos_medico', 'agendamentos_paciente']));
     }
 
@@ -42,7 +42,7 @@ class AgendamentoController extends Controller
      */
     public function create()
     {
-        //
+        //pagina do medico
     }
 
     /**
@@ -53,7 +53,19 @@ class AgendamentoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $hora = explode('~', $request->input('hora'));
+        
+        $agendamento = \App\Agendamento::create([
+            'paciente_id' => \Auth::user()->id,
+            'inicio' => $hora[0],
+            'termino' => $hora[1],
+            'medico_id' => $request->input('medico'),
+            'clinica_id' => $request->input('clinica'),
+            'status' => 0,
+            'obs' => null
+        ]);
+
+        return redirect('/agendamentos');
     }
 
     /**

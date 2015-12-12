@@ -36,6 +36,8 @@ Route::get('/medico/{id}', 'MedicoController@show');
 
 
 Route::get('/agendamentos', 'AgendamentoController@index');
+Route::post('/agendamento/cadastrar', 'AgendamentoController@store');
+
 Route::get('/horarios', 'HorarioController@index');
 Route::get('/areas', 'AreaController@index');
 

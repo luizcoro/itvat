@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Clinica;
+
 class ClinicaController extends Controller
 {
     /**
@@ -16,7 +18,8 @@ class ClinicaController extends Controller
      */
     public function index()
     {
-        $clinicas = \App\Clinica::all();
+        $pesquisa = \Input::get('pesquisa');
+        $clinicas = (isset($pesquisa) && $pesquisa != '') ? Clinica::where('nome', 'like', "%$pesquisa%")->get() : Clinica::all();
 
         return view('clinica.index', compact('clinicas'));
     }
@@ -39,7 +42,30 @@ class ClinicaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = \Validator::make($request->all(), [
+            'nome' => 'required',
+            'endereco' => 'required',
+            'foto' => 'required|image',
+        ]);
+        
+        if($validator->fails())
+        {
+            return redirect('/clinica/cadastrar')
+                ->withErrors($validator);
+        }
+
+        $file = $request->file('foto');
+        $image_name = time(). "-" . $file->getClientOriginalName();
+        $file->move('img/clinicas', $image_name);
+
+        Clinica::create([
+            'nome' => $request->input('nome'),
+            'endereco' => $request->input('endereco'),
+            'lat' => -18.906286,
+            'lng' => -48.257420,
+            'foto' => 'img/clinicas/' . $image_name 
+        ]);
+
     }
 
     /**

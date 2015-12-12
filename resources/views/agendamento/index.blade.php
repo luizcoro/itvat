@@ -57,7 +57,7 @@
         @endif
         <br/>
 
-        @if (isset($agendamentos_paciente) && count($agendamentos_paciente) > 1)
+        @if (isset($agendamentos_paciente) && count($agendamentos_paciente) > 0)
             <table class="table">
                 <tr>
                     <th>Médico</th>

@@ -10,7 +10,10 @@ class Clinica extends Model
 
     protected $fillable = [
         'nome',
-        'endereco'
+        'endereco',
+        'lat',
+        'lng',
+        'foto'
     ];
 
     public function agendamentos()

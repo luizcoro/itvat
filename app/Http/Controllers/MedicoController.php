@@ -24,9 +24,25 @@ class MedicoController extends Controller
      */
     public function index()
     {
-        $medicos = Medico::all();
-        
-        return view('medico.index', compact('medicos'));
+        $pesquisa = \Input::get('pesquisa');
+
+        if(isset($pesquisa) && $pesquisa != '')
+        {
+            $medicos =  Medico::hydrate(\DB::table('medicos')
+                ->join('users', 'users.id', '=', 'medicos.id')
+                ->where('users.name', 'like', "%$pesquisa%")
+                ->select('medicos.*')
+                ->distinct()
+                ->get());
+
+             
+            return view('medico.index', compact('medicos'));
+        }
+        else
+        {
+            $medicos = Medico::all();
+            return view('medico.index', compact('medicos'));
+        }
     }
 
     /**
@@ -131,10 +147,15 @@ class MedicoController extends Controller
     public function show($id)
     {
         $medico = Medico::findOrFail($id);
-
-        return view('medico.show', compact('medico'));
+        
+        $medico->info_basica = $medico->userInfo;
+        $areas = $medico->areas;
+        $clinicas = $medico->clinicas;
+        
+        return view('medico.show', compact(['medico', 'areas', 'clinicas']));
     }
 
+    //ajax
     public function getHorariosDisponiveis($id_medico)
     {
         $medico = Medico::findOrFail($id_medico);
